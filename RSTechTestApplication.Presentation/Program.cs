@@ -9,10 +9,15 @@ namespace RSTechTestApplication.Presentation
     internal sealed class Program
     {
         [STAThread]
-        public static void Main(string[] args) => BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+        public static void Main(string[] args)
+        {
+            var serviceProvider = BuildServiceProvider();
 
-        public static AppBuilder BuildAvaloniaApp()
+            BuildAvaloniaApp(serviceProvider)
+                .StartWithClassicDesktopLifetime(args);
+        }
+
+        public static AppBuilder BuildAvaloniaApp(IServiceProvider services)
             => AppBuilder.Configure(() => new App(services))
                 .UsePlatformDetect()
                 .WithInterFont()

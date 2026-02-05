@@ -1,18 +1,66 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:RSTechTestApplication.Presentation.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="RSTechTestApplication.Presentation.Views.MainWindow"
-        x:DataType="vm:MainViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="RSTechTestApplication.Presentation">
+		xmlns:viewmodels="using:RSTechTestApplication.Presentation.ViewModels"
+        xmlns:controls="using:RSTechTestApplication.Presentation"
+		mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+		MinWidth="600"
+		MinHeight="300"
+        WindowStartupLocation="CenterScreen"
+		x:Class="RSTechTestApplication.Presentation.Views.MainWindow"
+		x:DataType="viewmodels:MainViewModel"
+		Icon="/Assets/avalonia-logo.ico"
+		Title="RSTechTestApplication">
 
-    <Design.DataContext>
-        <vm:MainViewModel/>
-    </Design.DataContext>
+	<Design.DataContext>
+		<viewmodels:MainViewModel/>
+	</Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
+	<Grid Margin="10" >
+		<DataGrid ItemsSource="{Binding Tasks}"				  
+                    SelectedItem="{Binding SelectedTask}"
+                    AutoGenerateColumns="False"
+                    CanUserReorderColumns="False"
+                    IsReadOnly="False"
+                    SelectionMode="Single"
+                    GridLinesVisibility="All"
+                    BorderThickness="1" 
+                    BorderBrush="Gray"
+                    HeadersVisibility="Column"
+                    IsVisible="{Binding !IsLoading}"
+                    >
+            
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="IsCompleted" 
+                                        Width="160"
+                                        CanUserResize="False"											
+                                        SortMemberPath="IsCompleted"
+                                        CanUserSort="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Panel Margin="5" Focusable="False">								
+                                <CheckBox IsChecked="{Binding IsCompleted, Mode=TwoWay}"
+                                            IsTabStop="False"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>
+                            </Panel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                                
+                <DataGridTextColumn IsReadOnly="True" 
+                                    Header="Title" 
+                                    Width="*" 
+                                    MinWidth="200" 
+                                    Binding="{Binding Title, Mode=TwoWay}" />
+                                    
+                <DataGridTextColumn Header="CreatedAt" 
+                                    Width="180"
+                                    IsReadOnly="True"
+                                    CanUserResize="False"
+                                    Binding="{Binding CreatedAt, StringFormat='{}{0:dd.MM.yyyy HH:mm:ss}'}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+	</Grid>
 </Window>

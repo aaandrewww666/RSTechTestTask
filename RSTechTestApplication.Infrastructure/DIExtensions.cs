@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using RSTechTestApplication.Domain.Contracts;
+using RSTechTestApplication.Infrastructure.Repositories;
 
 namespace RSTechTestApplication.Infrastructure
 {
@@ -11,6 +13,7 @@ namespace RSTechTestApplication.Infrastructure
             this IServiceCollection services
             )
         {
+            services.AddScoped<ITaskRepository, TaskRepository>();
 
             return services;
         }

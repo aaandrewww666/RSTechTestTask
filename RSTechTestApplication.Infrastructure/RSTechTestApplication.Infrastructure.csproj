@@ -8,10 +8,13 @@
 
   <ItemGroup>
     <Folder Include="Database\" />
-    <Folder Include="Repositories\" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
 	<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RSTechTestApplication.Domain\RSTechTestApplication.Domain.csproj" />
   </ItemGroup>
 
 </Project>
