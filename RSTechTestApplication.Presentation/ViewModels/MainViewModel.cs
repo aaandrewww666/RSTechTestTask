@@ -1,5 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Message.Avalonia;
 using Microsoft.Extensions.Logging;
 using RSTechTestApplication.Domain.Contracts;
 using RSTechTestApplication.Domain.Entities;
@@ -34,12 +36,15 @@ namespace RSTechTestApplication.Presentation.ViewModels
             _dialogService = dialogService;
             _taskRepository = taskRepository;
 
+            MessageManager.Default.Duration = TimeSpan.FromSeconds(5);
+
             LoadTasksAsync().SafeFireAndForget(OnLoadingException);
         }
 
         public void OnLoadingException(Exception ex)
         {
             _logger.LogError($"Exception occured on loading tasks: {ex.Message}");
+            MessageManager.Default.ShowErrorMessage("Exception occured on loading tasks");
         }
 
         [RelayCommand]
@@ -78,6 +83,7 @@ namespace RSTechTestApplication.Presentation.ViewModels
         /// A command to add new task.
         /// Creates a new dialog to display the user the fields to fill in a new task. 
         /// If passes ui validation - tries to add to the DB.
+        /// Regardless of the result of adding to the DB adds to the list of Tasks.
         /// </summary>
         [RelayCommand]
         public async Task AddNewTaskAsync()
@@ -92,12 +98,22 @@ namespace RSTechTestApplication.Presentation.ViewModels
                 {
                     try
                     {
-                        await _taskRepository.AddAsync(vm.ToEntity());
-
+                        if (await _taskRepository.AddAsync(vm.ToEntity()) != null)
+                        {
+                            await Dispatcher.UIThread.InvokeAsync(() =>
+                            {
+                                MessageManager.Default.ShowSuccessMessage("Successfully added to the database.");
+                            });
+                        }
+                        else
+                            MessageManager.Default.ShowErrorMessage("Failed to add new task to the database.");
                     }
                     catch
                     {
-
+                        await Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            MessageManager.Default.ShowErrorMessage("Failed to add new task to the database.");
+                        });
                     }
                 });
             }
@@ -121,13 +137,20 @@ namespace RSTechTestApplication.Presentation.ViewModels
                 try
                 {
                     await _taskRepository.SoftDeleteAsync(taskToDelete.Id);
+
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        MessageManager.Default.ShowSuccessMessage("Successfully deleted from the database.");
+                    });
                 }
                 catch
                 {
-
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        MessageManager.Default.ShowErrorMessage("Failed to delete from database.");
+                    });
                 }
             });
-
         }
     }
 }

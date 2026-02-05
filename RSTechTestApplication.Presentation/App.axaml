@@ -1,11 +1,13 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:msg="https://github.com/xiyaowong/Message.Avalonia"
              x:Class="RSTechTestApplication.Presentation.App"
              RequestedThemeVariant="Light">
              
     <Application.Styles>
         <FluentTheme />
-        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>        
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>     
+        <msg:Theme  />   
         
     </Application.Styles>
 </Application>
