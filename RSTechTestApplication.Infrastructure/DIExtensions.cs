@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using RSTechTestApplication.Domain.Contracts;
+using RSTechTestApplication.Infrastructure.Database;
 using RSTechTestApplication.Infrastructure.Repositories;
 
 namespace RSTechTestApplication.Infrastructure
@@ -13,6 +15,11 @@ namespace RSTechTestApplication.Infrastructure
             this IServiceCollection services
             )
         {
+            services.AddDbContext<TaskDbContext>(options =>
+            {
+                options.UseNpgsql(PostgreSQLConnectionStringProvider.ConnectionString);
+            }, ServiceLifetime.Scoped);
+
             services.AddScoped<ITaskRepository, TaskRepository>();
 
             return services;

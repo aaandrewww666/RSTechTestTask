@@ -1,6 +1,6 @@
 ﻿namespace RSTechTestApplication.Domain.Entities
 {
-    public class TaskEntity
+    public sealed class TaskEntity
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

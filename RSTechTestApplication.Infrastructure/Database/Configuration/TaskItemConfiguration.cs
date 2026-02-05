@@ -4,7 +4,7 @@ using RSTechTestApplication.Domain.Entities;
 
 namespace RSTechTestApplication.Infrastructure.Database.Configuration
 {
-    public class TaskItemConfiguration : IEntityTypeConfiguration<TaskEntity>
+    public sealed class TaskItemConfiguration : IEntityTypeConfiguration<TaskEntity>
     {
         public void Configure(EntityTypeBuilder<TaskEntity> builder)
         {

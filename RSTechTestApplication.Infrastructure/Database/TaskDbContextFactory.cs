@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace RSTechTestApplication.Infrastructure.Database
 {
-    public class TaskDbContextFactory : IDesignTimeDbContextFactory<TaskDbContext>
+    public sealed class TaskDbContextFactory : IDesignTimeDbContextFactory<TaskDbContext>
     {
         public TaskDbContext CreateDbContext(string[] args)
         {

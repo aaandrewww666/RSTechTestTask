@@ -3,7 +3,7 @@ using RSTechTestApplication.Domain.Entities;
 
 namespace RSTechTestApplication.Infrastructure.Database
 {
-    public class TaskDbContext : DbContext
+    public sealed class TaskDbContext : DbContext
     {
         public DbSet<TaskEntity> Tasks => Set<TaskEntity>();
 
