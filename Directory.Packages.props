@@ -13,6 +13,7 @@
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.23" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.23" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.23" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
     <PackageVersion Include="Message.Avalonia" Version="1.1.0" />

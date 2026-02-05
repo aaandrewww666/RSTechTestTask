@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RSTechTestApplication.Domain.Contracts;
 using RSTechTestApplication.Infrastructure.Database;
+using RSTechTestApplication.Infrastructure.Database.Initializing;
 using RSTechTestApplication.Infrastructure.Repositories;
 
 namespace RSTechTestApplication.Infrastructure
@@ -21,6 +22,8 @@ namespace RSTechTestApplication.Infrastructure
             }, ServiceLifetime.Scoped);
 
             services.AddScoped<ITaskRepository, TaskRepository>();
+
+            services.AddSingleton<DatabaseInitializer>();
 
             return services;
         }
