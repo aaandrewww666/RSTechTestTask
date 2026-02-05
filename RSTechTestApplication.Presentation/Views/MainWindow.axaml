@@ -35,6 +35,12 @@
                     IsVisible="{Binding !IsLoading}"
                     >
             
+            <DataGrid.KeyBindings>
+		        <KeyBinding Gesture="Enter" Command="{Binding AddNewTaskCommand, Mode=OneWay}" />
+                <KeyBinding Command="{Binding ToggleCompletedCommand}" Gesture="Space" />
+                <KeyBinding Command="{Binding DeleteTaskCommand}" Gesture="Delete" />
+            </DataGrid.KeyBindings>
+            
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="IsCompleted" 
                                         Width="160"
