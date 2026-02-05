@@ -16,6 +16,10 @@
 	<Design.DataContext>
 		<viewmodels:MainViewModel/>
 	</Design.DataContext>
+	
+	<Window.KeyBindings>
+		<KeyBinding Gesture="Enter" Command="{Binding AddNewTaskCommand, Mode=OneWay}" />
+    </Window.KeyBindings>
 
 	<Grid Margin="10" >
 		<DataGrid ItemsSource="{Binding Tasks}"				  

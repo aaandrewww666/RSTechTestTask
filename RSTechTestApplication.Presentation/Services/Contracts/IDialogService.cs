@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace RSTechTestApplication.Presentation.Services
+namespace RSTechTestApplication.Presentation.Services.Contracts
 {
     public interface IDialogService
     {

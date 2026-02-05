@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using RSTechTestApplication.Presentation.Services.Contracts;
 using RSTechTestApplication.Presentation.ViewModels;
 using RSTechTestApplication.Presentation.Views;
 using System;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RSTechTestApplication.Presentation.Services
 {
-    public class DialogService : IDialogService
+    public sealed class DialogService : IDialogService
     {
         private readonly Window _window;
 

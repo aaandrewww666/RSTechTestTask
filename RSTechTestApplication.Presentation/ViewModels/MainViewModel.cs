@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RSTechTestApplication.Domain.Contracts;
 using RSTechTestApplication.Domain.Entities;
 using RSTechTestApplication.Presentation.Extensions;
+using RSTechTestApplication.Presentation.Services.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,7 @@ namespace RSTechTestApplication.Presentation.ViewModels
 {
     public partial class MainViewModel : ViewModelBase
     {
+        private readonly IDialogService _dialogService;
         private readonly ILogger<MainViewModel> _logger;
         private readonly IServiceProvider _services;
         private readonly ITaskRepository _taskRepository;
@@ -25,10 +27,11 @@ namespace RSTechTestApplication.Presentation.ViewModels
         [ObservableProperty]
         private bool isLoading;
 
-        public MainViewModel(IServiceProvider services, ILogger<MainViewModel> logger, ITaskRepository taskRepository)
+        public MainViewModel(IServiceProvider services, ILogger<MainViewModel> logger, IDialogService dialogService, ITaskRepository taskRepository)
         {
             _services = services;
             _logger = logger;
+            _dialogService = dialogService;
             _taskRepository = taskRepository;
 
             LoadTasksAsync().SafeFireAndForget(OnLoadingException);
@@ -78,7 +81,10 @@ namespace RSTechTestApplication.Presentation.ViewModels
         public async Task AddNewTaskAsync()
         {
             var vm = new TaskItemViewModel(_taskRepository);
-
+            if (await _dialogService.ShowDialogAsync(vm))
+            {
+                Tasks.Add(vm);
+            }
         }
 
         /// <summary>
