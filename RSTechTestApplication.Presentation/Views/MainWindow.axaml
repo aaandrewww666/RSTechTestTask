@@ -22,6 +22,8 @@
     </Window.KeyBindings>
 
 	<Grid Margin="10" >
+        <controls:Spinner HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="{Binding IsLoading}"/>
+
 		<DataGrid ItemsSource="{Binding Tasks}"				  
                     SelectedItem="{Binding SelectedTask}"
                     AutoGenerateColumns="False"
