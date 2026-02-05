@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSTechTestApplication.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSTechTestApplication.Infrastructure", "RSTechTestApplication.Infrastructure\RSTechTestApplication.Infrastructure.csproj", "{7E2A2AC2-20A9-428D-891B-E0829F4B83BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RSTechTestApplication.Tests", "RSTechTestApplication.Tests\RSTechTestApplication.Tests.csproj", "{B5F3A292-B9B5-46ED-89D5-9D80DC778A7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{7E2A2AC2-20A9-428D-891B-E0829F4B83BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E2A2AC2-20A9-428D-891B-E0829F4B83BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E2A2AC2-20A9-428D-891B-E0829F4B83BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5F3A292-B9B5-46ED-89D5-9D80DC778A7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5F3A292-B9B5-46ED-89D5-9D80DC778A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5F3A292-B9B5-46ED-89D5-9D80DC778A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5F3A292-B9B5-46ED-89D5-9D80DC778A7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
