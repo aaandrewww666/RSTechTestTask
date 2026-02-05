@@ -1,16 +1,27 @@
-using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using RSTechTestApplication.Presentation.ViewModels;
 using RSTechTestApplication.Presentation.Views;
+using System;
+using System.Linq;
 
 namespace RSTechTestApplication.Presentation
 {
     public partial class App : Application
     {
+        private readonly IServiceProvider _services;
+        private readonly ILogger<App> _logger;
+
+        public App(IServiceProvider services)
+        {
+            _services = services;
+            _logger = _services.GetRequiredService<ILogger<App>>();
+        }
+
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -20,13 +31,13 @@ namespace RSTechTestApplication.Presentation
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-                // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-                DisableAvaloniaDataAnnotationValidation();
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainViewModel(),
-                };
+                MainWindow mainWindow = _services.GetRequiredService<MainWindow>();
+
+                MainViewModel mainViewModel = _services.GetRequiredService<MainViewModel>();
+
+                mainWindow.DataContext = mainViewModel;
+
+                desktop.MainWindow = mainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();

@@ -1,22 +1,39 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using RSTechTestApplication.Infrastructure;
+using System;
 
 namespace RSTechTestApplication.Presentation
 {
     internal sealed class Program
     {
-        // Initialization code. Don't use any Avalonia, third-party APIs or any
-        // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-        // yet and stuff might break.
         [STAThread]
         public static void Main(string[] args) => BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
 
-        // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<App>()
+            => AppBuilder.Configure(() => new App(services))
                 .UsePlatformDetect()
                 .WithInterFont()
                 .LogToTrace();
+
+        private static ServiceProvider BuildServiceProvider()
+        {
+            var services = new ServiceCollection();
+
+            // Logging
+            services.AddLogging(builder =>
+            {
+                builder.ClearProviders();
+                builder.AddDebug();
+            });
+
+            services
+                .AddPresentation()
+                .AddInfrastructure();
+
+            return services.BuildServiceProvider();
+        }
     }
 }
