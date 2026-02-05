@@ -14,17 +14,32 @@ namespace RSTechTestApplication.Infrastructure.Database.Initializing
             _logger = logger;
         }
 
-        public DatabaseInitResult InitializeMigrations()
+        public async Task<DatabaseInitResult> InitializeMigrations()
         {
             try
             {
                 using var scope = _services.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<TaskDbContext>();
 
-                _logger.LogInformation($"Trying to migrate");
-                context.Database.Migrate();
+                if (!await context.Database.CanConnectAsync())
+                {
+                    return DatabaseInitResult.Failure("Couldn't connect to the database");
+                }
 
-                return DatabaseInitResult.Success();
+                var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+
+                if (!pendingMigrations.Any())
+                {
+                    _logger.LogInformation("The database is up-to-date, no migrations are required");
+                    return DatabaseInitResult.Success(0);
+                }
+
+                _logger.LogInformation($"Applying {pendingMigrations.Count()} migrations...");
+
+                await context.Database.MigrateAsync();
+
+                _logger.LogInformation("Migrations have been successfully applied");
+                return DatabaseInitResult.Success(pendingMigrations.Count());
             }
             catch (Npgsql.NpgsqlException ex)
             {
@@ -46,22 +61,17 @@ namespace RSTechTestApplication.Infrastructure.Database.Initializing
 
         public async Task<DatabaseInitResult> InitializeMigrationsWithRetryAsync(int maxAttempts = 3)
         {
-            var databaseInitResult = await Task.Run(() =>
+            DatabaseInitResult result = DatabaseInitResult.Failure("Couldn't connect to the database");
+
+            for (int attempt = 1; attempt <= maxAttempts; attempt++)
             {
-                DatabaseInitResult result = DatabaseInitResult.Failure("Couldn't connect to the database");
+                _logger.LogInformation($"Attempt {attempt} to initialize database");
+                result = await InitializeMigrations();
 
-                for (int attempt = 1; attempt <= maxAttempts; attempt++)
-                {
-                    _logger.LogInformation($"Attempt {attempt} to initialize database");
-                    result = InitializeMigrations();
-
-                    if (result.IsSuccess)
-                        return result;
-                }
-                return result;
-            });
-
-            return databaseInitResult;
+                if (result.IsSuccess)
+                    return result;
+            }
+            return result;
         }
     }
 }

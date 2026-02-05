@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using RSTechTestApplication.Domain.Contracts;
 using RSTechTestApplication.Domain.Entities;
+using RSTechTestApplication.Presentation.Extensions;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -43,6 +44,11 @@ namespace RSTechTestApplication.Presentation.ViewModels
             isCompleted = model.IsCompleted;
             CreatedAt = model.CreatedAt.ToLocalTime();
             _taskRepository = taskRepository;
+        }
+
+        partial void OnIsCompletedChanged(bool value)
+        {
+            _taskRepository.UpdateCompletionStatusAsync(Id, value).SafeFireAndForget();
         }
 
         public void SetLocalTime()
