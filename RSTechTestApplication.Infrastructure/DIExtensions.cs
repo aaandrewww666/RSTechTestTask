@@ -4,6 +4,9 @@ using RSTechTestApplication.Domain.Contracts;
 using RSTechTestApplication.Infrastructure.Database;
 using RSTechTestApplication.Infrastructure.Database.Initializing;
 using RSTechTestApplication.Infrastructure.Repositories;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("RSTechTestApplication.Tests")]
 
 namespace RSTechTestApplication.Infrastructure
 {
