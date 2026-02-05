@@ -61,7 +61,7 @@ namespace RSTechTestApplication.Presentation.ViewModels
             try
             {
                 _logger.LogInformation("Trying to get all tasks");
-                IEnumerable<TaskEntity> tasks = [new TaskEntity("oao"), new TaskEntity("oao2")];
+                IEnumerable<TaskEntity> tasks = await _taskRepository.GetAllAsync();
 
                 foreach (var task in tasks)
                 {
@@ -76,14 +76,30 @@ namespace RSTechTestApplication.Presentation.ViewModels
 
         /// <summary>
         /// A command to add new task.
+        /// Creates a new dialog to display the user the fields to fill in a new task. 
+        /// If passes ui validation - tries to add to the DB.
         /// </summary>
         [RelayCommand]
         public async Task AddNewTaskAsync()
         {
             var vm = new TaskItemViewModel(_taskRepository);
+
             if (await _dialogService.ShowDialogAsync(vm))
             {
-                Tasks.Add(vm);
+                Tasks.Add(vm); //always do even we don't have connection to DB or have exceptions
+
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _taskRepository.AddAsync(vm.ToEntity());
+
+                    }
+                    catch
+                    {
+
+                    }
+                });
             }
         }
 
@@ -93,12 +109,24 @@ namespace RSTechTestApplication.Presentation.ViewModels
         [RelayCommand]
         public async Task DeleteTaskAsync()
         {
-            if (SelectedTask == null)
-            {
-                return;
-            }
-            Tasks.Remove(SelectedTask);
+            if (SelectedTask == null) return;
+
+            var taskToDelete = SelectedTask;
+
+            Tasks.Remove(taskToDelete);
             SelectedTask = null;
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _taskRepository.SoftDeleteAsync(taskToDelete.Id);
+                }
+                catch
+                {
+
+                }
+            });
 
         }
     }
