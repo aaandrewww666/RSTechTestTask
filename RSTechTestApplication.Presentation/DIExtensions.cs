@@ -15,15 +15,12 @@ namespace RSTechTestApplication.Presentation
         public static IServiceCollection AddPresentation(this IServiceCollection services)
         {
             services.AddSingleton<MainWindow>();
-            services.AddSingleton<AddEditTaskWindow>();
+
+            services.AddSingleton<IDialogService, DialogService>();
+
+            services.AddTransient<AddEditTaskWindow>();
 
             services.AddSingleton<MainViewModel>();
-
-            services.AddSingleton<IDialogService>(provider =>
-            {
-                var mainWindow = provider.GetRequiredService<MainWindow>();
-                return new DialogService(mainWindow); //fabric for dialog service from mainWindow
-            });
 
             services.AddLogging(builder => builder.AddDebug());
             return services;

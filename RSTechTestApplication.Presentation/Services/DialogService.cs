@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using RSTechTestApplication.Presentation.Services.Contracts;
 using RSTechTestApplication.Presentation.ViewModels;
 using RSTechTestApplication.Presentation.Views;
@@ -9,11 +10,13 @@ namespace RSTechTestApplication.Presentation.Services
 {
     public sealed class DialogService : IDialogService
     {
-        private readonly Window _window;
+        private readonly MainWindow _window;
+        private readonly IServiceProvider _serviceProvider;
 
-        public DialogService(Window window)
+        public DialogService(MainWindow window, IServiceProvider serviceProvider)
         {
             _window = window;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task<bool> ShowDialogAsync<TViewModel>(TViewModel viewModel)
@@ -24,11 +27,11 @@ namespace RSTechTestApplication.Presentation.Services
             return await dialog.ShowDialog<bool>(_window);
         }
 
-        private static Window CreateDialog<TViewModel>(TViewModel viewModel)
+        private Window CreateDialog<TViewModel>(TViewModel viewModel)
         {
             return viewModel switch
             {
-                TaskItemViewModel => new AddEditTaskWindow(),
+                TaskItemViewModel => _serviceProvider.GetRequiredService<AddEditTaskWindow>(),
                 _ => throw new ArgumentException($"No dialog for {typeof(TViewModel).Name}")
             };
         }

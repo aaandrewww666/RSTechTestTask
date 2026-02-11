@@ -16,8 +16,16 @@ public partial class AddEditTaskWindow : Window
         base.OnDataContextChanged(e);
 
         if (DataContext is TaskItemViewModel vm)
-        {
-            vm.CloseRequested += result => Close(result);
-        }
+            vm.CloseRequested += OnCloseRequested;
     }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        if (DataContext is TaskItemViewModel vm)
+            vm.CloseRequested -= OnCloseRequested;
+
+        base.OnClosed(e);
+    }
+
+    private void OnCloseRequested(bool result) => Close(result);
 }
