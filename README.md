@@ -83,6 +83,6 @@ RSTechTestApplication/
 └── README.md
 ```
 
-## Лицензия
+## License
 
 MIT
